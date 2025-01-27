@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Encryption</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease; 
+        }
+
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            
+            transition: background-color 0.3s ease; 
+        }
+
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: transform 0.3s ease, opacity 0.3s ease; 
+            opacity: 0; 
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+            transition: font-size 0.3s ease, opacity 0.3s ease; 
+            opacity: 0; 
+        }
+
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: opacity 0.3s ease; 
+            opacity: 0; 
+        }
+
+        input[type="text"],
+        input[type="submit"] {
+            padding: 15px;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s ease; 
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px #007bff; 
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease; 
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+            transform: translateY(-5px); 
+        }
+
+        
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 15px;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            input[type="text"],
+            input[type="submit"] {
+                font-size: 1em;
+            }
+        }
+
+        
+        .result {
+            margin-top: 20px;
+            background-color: #e2e2e2;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            text-align: left;
+            word-wrap: break-word;
+            transition: opacity 0.3s ease; 
+            opacity: 0; 
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Webhook Encryption</h1>
+        <form id="webhook-form">
+            <label for="webhook_url">Webhook URL</label>
+            <input type="text" id="webhook_url" name="webhook_url" required pattern="https:\/\/discord\.com\/api\/webhooks\/.*" placeholder="https://discord.com/api/webhooks/...">
+            
+            <input type="submit" value="Encrypt Webhook">
+        </form>
+
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        
+        document.getElementById('webhook-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const webhookUrl = document.getElementById('webhook_url').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch(`/encrypt`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `webhook_url=${encodeURIComponent(webhookUrl)}`
+                });
+
+                const data = await response.json();
+                
+                if (data.encrypted_webhook) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.classList.remove('error');
+                    resultDiv.classList.add('success');
+                    resultDiv.innerHTML = `<strong>Encrypted Webhook:</strong> <br>${data.encrypted_webhook}<br><br><strong>API URL:</strong> <br><a href="${data.api_url}" target="_blank">${data.api_url}</a>`;
+                    resultDiv.style.opacity = '0'; 
+                    setTimeout(() => {
+                        resultDiv.style.opacity = '1'; 
+                    }, 100);
+                } else {
+                    throw new Error('Encryption failed');
+                }
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.classList.remove('success');
+                resultDiv.classList.add('error');
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.style.opacity = '0'; 
+                setTimeout(() => {
+                    resultDiv.style.opacity = '1'; 
+                }, 100);
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            const form = document.querySelector('form');
+            const h1 = document.querySelector('h1');
+
+            setTimeout(() => {
+                container.style.opacity = '1';
+                form.style.opacity = '1';
+                h1.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+
+</body>
+</html>
