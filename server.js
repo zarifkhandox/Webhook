@@ -3,19 +3,19 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config(); 
 
 const app = express();
-const dbPath = process.env.DB_PATH || 'keys.db'; // Use environment variable for database path
+const dbPath = process.env.DB_PATH || 'keys.db'; 
 const db = new sqlite3.Database(dbPath);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files from the "public" directory
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Drop the table if it exists and create a new one
+
 db.serialize(() => {
     db.run(`DROP TABLE IF EXISTS keys`);
     db.run(`CREATE TABLE keys (
