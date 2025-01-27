@@ -54,7 +54,7 @@ out/
 # Public uploads (optional, if dynamic)
 public/uploads/
 
-#database
+# Database 2
 .db
 .sqlite
 .sqlite3
