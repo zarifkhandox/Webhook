@@ -16,6 +16,14 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "/api.js"
+    },
+    {
+      "src": "/encrypt",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/public/index.html"
     }
