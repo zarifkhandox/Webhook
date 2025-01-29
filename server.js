@@ -50,7 +50,7 @@ app.post('/encrypt', (req, res) => {
                 return res.status(500).json({ error: 'Failed to store the encrypted webhook' });
             }
             const generationApiPort = process.env.GENERATION_API_PORT || PORT;
-            res.json({ encrypted_webhook: encrypted, api_url: `http://www.hosted-api.42web.io:${generationApiPort}${apiUrl}` });
+            res.json({ encrypted_webhook: encrypted, api_url: `http://www.hosted-api.42web.io${apiUrl}` });
         });
     } catch (error) {
         console.error('Encryption error:', error);
