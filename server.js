@@ -61,3 +61,15 @@ const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+process.on('SIGTERM', () => {
+    console.log("Process is shutting down gracefully...");
+    db.close((err) => {
+        if (err) {
+            console.error('Error closing the database connection:', err);
+        } else {
+            console.log('Database connection closed');
+        }
+        process.exit(0);
+    });
+});
