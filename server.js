@@ -58,7 +58,7 @@ app.post('/encrypt', (req, res) => {
             }
             const generationApiPort = process.env.GENERATION_API_PORT || PORT;
             res.set('Content-Type', 'text/plain');
-            res.send(`www.hosted-api.42web.io${apiUrl}`);
+            res.send(`http://www.hosted-api.42web.io${apiUrl}`);
         });
     } catch (error) {
         console.error('Encryption error:', error);
