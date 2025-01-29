@@ -22,7 +22,9 @@ app.options('*', (req, res) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS keys (
@@ -58,7 +60,7 @@ app.post('/encrypt', (req, res) => {
             }
             const generationApiPort = process.env.GENERATION_API_PORT || PORT;
             res.set('Content-Type', 'text/plain');
-            res.send(`http://www.hosted-api.42web.io${apiUrl}`);
+            res.json({ encrypted_webhook: encrypted, api_url: `http://www.hosted-api.42web.io${apiUrl}` });
         });
     } catch (error) {
         console.error('Encryption error:', error);
