@@ -40,28 +40,27 @@ app.all('/:apiUrl', (req, res) => {
             console.log('Decrypted webhook URL:', decrypted);
 
             
-            axios({
-                method: 'POST',
-                url: decrypted,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                data: JSON.stringify({
-                    content: req.body.content || 'Your API is now currently secure. This is used to check if your API is working.'
-                })
-            })
-            .then(response => res.status(response.status).send(response.data))
-            .catch(error => {
-                console.error('Error forwarding request:', error.message);
-                console.error('Response data:', error.response ? error.response.data : 'No response data');
-                res.status(error.response ? error.response.status : 500).send(error.message);
-            });
-        } catch (decryptionError) {
-            console.error('Decryption error:', decryptionError);
-            res.status(500).json({ error: 'Failed to decrypt the webhook URL' });
-        }
-    });
+axios({
+    method: 'POST',
+    url: decrypted,  
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    data: JSON.stringify({
+        content: req.body.content || 'Your API is now currently secure. This is used to check if your API is working.'
+    }),
+    maxRedirects: 5, 
+})
+.then(response => {
+    console.log('Redirected to:', response.request.res.responseUrl);  
+    res.status(response.status).send(response.data);
+})
+.catch(error => {
+    console.error('Error forwarding request:', error.message);
+    console.error('Response data:', error.response ? error.response.data : 'No response data');
+    res.status(error.response ? error.response.status : 500).send(error.message);
 });
+
 
 const PORT = process.env.API_PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => {
