@@ -8,7 +8,7 @@ const app = express();
 const dbPath = process.env.DB_PATH || 'keys.db'; 
 const db = new sqlite3.Database(dbPath);
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 app.all('/:apiUrl', (req, res) => {
