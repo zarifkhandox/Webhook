@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const dbPath = process.env.DB_PATH || 'keys.db'; 
