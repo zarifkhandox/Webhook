@@ -14,7 +14,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
 
-
 app.options('*', (req, res) => {
     res.sendStatus(200); 
 });
@@ -32,40 +31,44 @@ app.all('/:apiUrl', (req, res) => {
         const { encrypted_webhook, iv, key } = row;
 
         try {
-            
             const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key, 'hex'), Buffer.from(iv, 'hex'));
             let decrypted = decipher.update(encrypted_webhook, 'hex', 'utf8');
             decrypted += decipher.final('utf8');
 
             console.log('Decrypted webhook URL:', decrypted);
 
-            
-axios({
-    method: 'POST',
-    url: decrypted,  
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    data: JSON.stringify({
-        content: req.body.content || 'Your API is now currently secure. This is used to check if your API is working.'
-    }),
-    maxRedirects: 5, 
-})
-.then(response => {
-    console.log('Redirected to:', response.request.res.responseUrl);  
-    res.status(response.status).send(response.data);
-})
-.catch(error => {
-    console.error('Error forwarding request:', error.message);
-    console.error('Response data:', error.response ? error.response.data : 'No response data');
-    res.status(error.response ? error.response.status : 500).send(error.message);
+            axios({
+                method: 'POST',
+                url: decrypted,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    content: req.body.content || 'Your API is now currently secure. This is used to check if your API is working.',
+                }),
+                maxRedirects: 5, 
+            })
+                .then(response => {
+                    console.log('Redirected to:', response.request.res.responseUrl);  
+                    res.status(response.status).send(response.data);
+                })
+                .catch(error => {
+                    console.error('Error forwarding request:', error.message);
+                    console.error('Response data:', error.response ? error.response.data : 'No response data');
+                    res.status(error.response ? error.response.status : 500).send(error.message);
+                });
+        } catch (error) {
+            console.error('Decryption error:', error);
+            res.status(500).json({ error: 'Decryption failed' });
+        }
+    });
 });
-
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`API server is running on http://localhost:${PORT}`);
 });
+
 process.on('SIGTERM', () => {
     console.log("API Process is shutting down gracefully...");
     db.close((err) => {
