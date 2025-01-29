@@ -8,7 +8,16 @@ const app = express();
 const dbPath = process.env.DB_PATH || 'keys.db'; 
 const db = new sqlite3.Database(dbPath);
 
-app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: '*', 
+    methods: ['GET', 'POST', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'Authorization'], 
+}));
+
+
+app.options('*', (req, res) => {
+    res.sendStatus(200); 
+});
 app.use(express.json());
 
 app.all('/:apiUrl', (req, res) => {
