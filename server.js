@@ -16,7 +16,7 @@ app.use(cors({
 }));
 
 app.options('*', (req, res) => {
-    res.sendStatus(200); // Respond with 200 for preflight requests
+    res.sendStatus(200); 
 });
 
 app.use(bodyParser.json());
