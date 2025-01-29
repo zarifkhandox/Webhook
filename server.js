@@ -4,10 +4,15 @@ const crypto = require('crypto');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 require('dotenv').config(); 
+const cors = require('cors');
 
 const app = express();
 const dbPath = process.env.DB_PATH || 'keys.db'; 
 const db = new sqlite3.Database(dbPath);
+
+app.use(cors({
+    origin: '*', 
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
