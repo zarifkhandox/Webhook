@@ -11,8 +11,13 @@ const dbPath = process.env.DB_PATH || 'keys.db';
 const db = new sqlite3.Database(dbPath);
 
 app.use(cors({
-    origin: '*', 
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
 }));
+
+app.options('*', (req, res) => {
+    res.sendStatus(200); // Respond with 200 for preflight requests
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
