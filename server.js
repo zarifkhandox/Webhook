@@ -17,8 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 db.serialize(() => {
-    db.run(`DROP TABLE IF EXISTS keys`);
-    db.run(`CREATE TABLE keys (
+    db.run(`CREATE TABLE IF NOT EXISTS keys (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         api_url TEXT,
         encrypted_webhook TEXT,
