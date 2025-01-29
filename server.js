@@ -22,9 +22,7 @@ app.options('*', (req, res) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS keys (
@@ -51,16 +49,13 @@ app.post('/encrypt', (req, res) => {
         let encrypted = cipher.update(webhook_url, 'utf8', 'hex');
         encrypted += cipher.final('hex');
 
-        const apiUrl = `/${crypto.randomBytes(15).toString('hex')}`;
-
-        db.run(`INSERT INTO keys (api_url, encrypted_webhook, iv, key) VALUES (?, ?, ?, ?)`, [apiUrl, encrypted, iv.toString('hex'), key.toString('hex')], function(err) {
+        db.run(`INSERT INTO keys (encrypted_webhook, iv, key) VALUES (?, ?, ?)`, [encrypted, iv.toString('hex'), key.toString('hex')], function(err) {
             if (err) {
                 console.error('Database error:', err);
                 return res.status(500).json({ error: 'Failed to store the encrypted webhook' });
             }
-            const generationApiPort = process.env.GENERATION_API_PORT || PORT;
             res.set('Content-Type', 'text/plain');
-            res.json({ encrypted_webhook: encrypted, api_url: `http://www.hosted-api.42web.io${apiUrl}` });
+            res.json({ encrypted_webhook: encrypted });
         });
     } catch (error) {
         console.error('Encryption error:', error);
