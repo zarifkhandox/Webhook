@@ -16,10 +16,7 @@ app.use(cors({
 
 
 app.options('*', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.sendStatus(200);
+    res.sendStatus(200); 
 });
 app.use(express.json());
 
