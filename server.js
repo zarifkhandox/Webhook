@@ -63,7 +63,7 @@ app.post('/encrypt', (req, res) => {
                         res.json({
                 encrypted_webhook: encrypted,
                 api_url: `http://www.hosted-api.42web.io${apiUrl}`,
-                plain_text_response: `http://www.hosted-api.42web.io${apiUrl}`
+                plain_text_response: `https://www.hosted-api.42web.io${apiUrl}`
             });
         });
     } catch (error) {
