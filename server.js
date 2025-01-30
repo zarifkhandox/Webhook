@@ -74,7 +74,7 @@ app.post('/encrypt', (req, res) => {
 
 const PORT = process.env.SERVER_PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on https://localhost:${PORT}`);
 });
 
 process.on('SIGTERM', () => {
