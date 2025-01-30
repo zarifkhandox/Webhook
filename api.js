@@ -47,7 +47,7 @@ app.all('/:apiUrl', (req, res) => {
                 data: JSON.stringify({
                     content: req.body.content || 'Your API is now currently secure. This is used to check if your API is working.',
                 }),
-                maxRedirects: 5, 
+                maxRedirects: 0, 
             })
                 .then(response => {
                     console.log('Redirected to:', response.request.res.responseUrl);  
