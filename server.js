@@ -60,7 +60,11 @@ app.post('/encrypt', (req, res) => {
             }
             const generationApiPort = process.env.GENERATION_API_PORT || PORT;
             res.set('Content-Type', 'text/plain');
-            res.json({ encrypted_webhook: encrypted, api_url: `http://www.hosted-api.42web.io${apiUrl}` });
+                        res.json({
+                encrypted_webhook: encrypted,
+                api_url: `http://www.hosted-api.42web.io${apiUrl}`,
+                plain_text_response: `http://www.hosted-api.42web.io${apiUrl}`
+            });
         });
     } catch (error) {
         console.error('Encryption error:', error);
