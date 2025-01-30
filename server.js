@@ -62,7 +62,7 @@ app.post('/encrypt', (req, res) => {
             res.set('Content-Type', 'text/plain');
                         res.json({
                 encrypted_webhook: encrypted,
-                api_url: `http://www.hosted-api.42web.io${apiUrl}`,
+                api_url: `https://www.hosted-api.42web.io${apiUrl}`,
                 plain_text_response: `https://www.hosted-api.42web.io${apiUrl}`
             });
         });
