@@ -67,7 +67,7 @@ app.all('/:apiUrl', (req, res) => {
 
 const PORT = process.env.API_PORT || process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`API server is running on http://localhost:${PORT}`);
+    console.log(`API server is running on https://localhost:${PORT}`);
 });
 
 process.on('SIGTERM', () => {
